@@ -1,4 +1,5 @@
 import { TreeConnectionType, TreeNode } from '../types/TreeNode';
+import { TreeStarterNode } from '../types/TreeStarterNode';
 
 export function letterCountsToTreeNodes(
     letterCounts: Record<string, number>
@@ -19,7 +20,7 @@ export function letterCountsToTreeNodes(
 
 export function sortTree(nodes: TreeNode[]): TreeNode[] {
     return nodes.sort((a, b) => {
-        return a.count - b.count;
+        return b.count - a.count;
     });
 }
 
@@ -44,4 +45,15 @@ export function compressTree(nodes: TreeNode[]): TreeNode[] {
     nodes[newLen - 1].n_children.parentType = TreeConnectionType.n;
 
     return nodes;
+}
+
+export function recursiveTreeGen(nodes: TreeNode[]): TreeStarterNode {
+    if (nodes.length == 2) {
+        return {
+            n_children: nodes[0],
+            p_children: nodes[1],
+        };
+    }
+
+    return recursiveTreeGen(sortTree(compressTree(sortTree(nodes))));
 }
